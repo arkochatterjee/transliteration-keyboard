@@ -1,1 +1,53 @@
-<h1>Hello. Check Flask</h1>
+<html>
+
+<head>
+        <meta charset="UTF-16">
+        </head>
+
+        <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+Select Language : <br>
+<select id="lang">
+       
+            <option value="bengali" id="bengali" selected="selected">Bengali</option>
+            <option value="hindi" id="hindi">Hindi</option>
+            <option value="tamil" id="tamil">Tamil</option>
+       
+        </select>
+        <br><br>
+        
+<textarea placeholder="Type something here" rows="30" cols="50"></textarea>
+<div></div>
+<hr><br>
+After AJAX<br>
+<p></p>
+<script>
+
+$('textarea').on('input', function() {
+    text = $('textarea').val();
+    $('div').html(text);
+
+    lang = $("#lang :selected").val();
+    $.ajax({
+  type : 'POST',
+  url : "{{url_for('predict')}}",
+  data : {'data' : text,'lang' : lang},
+  
+  success: function(data) {
+    $('p').html(data);
+    }
+
+
+});
+
+  
+
+
+  });
+
+
+
+</script>
+
+</body>
+</html>
