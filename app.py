@@ -1,14 +1,12 @@
 from flask import Flask, render_template, request, send_file, flash, redirect, session, abort, url_for, jsonify
-import pymysql
 import json
-from flask_wtf.csrf import CsrfProtect
 import requests
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index2.html')
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():

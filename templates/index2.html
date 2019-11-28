@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<title>Transliteration Keyboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+    background-color: black;
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+div.justified {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+<body>
+  
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+  <div class="w3-display-topleft w3-padding-large w3-xlarge">
+    <!--Lpgo -->
+  </div>
+  <div class="w3-display-middle">
+    <h1 class="w3-jumbo w3-animate-top">Transliteration Keyboard </h1>
+    <hr class="w3-border-grey" style="margin:auto;width:40%">
+    <p class="w3-large w3-center">Select Language : 
+            <select id="lang">
+                   
+                        <option value="bengali" id="bengali" selected="selected">Bengali</option>
+                        <option value="hindi" id="hindi">Hindi</option>
+                        <option value="tamil" id="tamil">Tamil</option>
+                   
+                    </select>
+                    <br></p>
+    <div class="justified">
+    <textarea placeholder="Type something here" rows="5" cols="50" list="cars" id="tarea"></textarea>
+    </div>
+    <br>
+    <p class="w3-large w3-center" id="select"></p>
+    <div class="justified">
+    <div id="test1"></div>
+</div>
+
+<hr><br>
+   
+  </div>
+  <div class="w3-display-bottomleft w3-padding-large">
+      Developed by Arko Chatterjee 
+    
+  </div>
+</div>
+
+
+
+
+
+
+<script>
+
+        $('#tarea').on('input', function() {
+            text = $('#tarea').val();
+            $('#div1').html(text);
+        
+            lang = $("#lang :selected").val();
+            $.ajax({
+          type : 'POST',
+          url : "{{url_for('predict')}}",
+          data : {'data' : text,'lang' : lang},
+          
+          success: function(data) {
+           
+            console.log(data) 
+            json=JSON.parse(data);
+            $('#test').html(json[0]);
+            var data = ""
+            for(var i =0;i < json.length;i++)
+            {   
+            var item = json[i];
+            data +=  '<button id='+item+'>'+item+'</button>' 
+         
+            
+            }   
+            $('#test1').html(data);
+
+            if(json[0] == "")
+            {
+                $('#select').html(" ");
+            }
+            else{
+                $('#select').html("Select from the options");
+            }
+           
+        
+            
+                   
+        
+            }
+        
+        
+        });
+              
+        
+          });
+        
+        
+          $('#test1').click(function( e ){
+            
+            var v = e.target.id
+            console.log("Clicked "+v)
+            $('#tarea').val(v);
+           
+        
+        
+        
+        });
+        
+        
+        
+        
+        
+        </script>
+
+</body>
+</html>

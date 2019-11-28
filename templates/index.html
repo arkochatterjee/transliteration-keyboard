@@ -1,12 +1,29 @@
 <html>
 
 <head>
-        <meta charset="UTF-16">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
         </head>
-
+        <style>
+                body,h1 {font-family: "Raleway", sans-serif}
+                body, html {height: 100%}
+                .bgimg {
+                  background-image: url('/w3images/forestbridge.jpg');
+                  min-height: 100%;
+                  background-position: center;
+                  background-size: cover;
+                }
+                </style>
         <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-Select Language : <br>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<h1>Transliteration Keyboard</h1>
+Arko Chatterjee<br><br>
+Select Language : 
 <select id="lang">
        
             <option value="bengali" id="bengali" selected="selected">Bengali</option>
@@ -16,16 +33,34 @@ Select Language : <br>
         </select>
         <br><br>
         
-<textarea placeholder="Type something here" rows="30" cols="50"></textarea>
-<div></div>
+<textarea placeholder="Type something here" rows="30" cols="50" list="cars" id="tarea"></textarea>
+
+
+<div id="div1"></div>
+<hr>
+
+<div id="test1"></div>
+
 <hr><br>
 After AJAX<br>
 <p></p>
+<br>
+<hr>
+<h4 id="test"></h4>
+
+<br>
+clicked
+<p id="clicked"></p>
+
+
+
+
+
 <script>
 
-$('textarea').on('input', function() {
-    text = $('textarea').val();
-    $('div').html(text);
+$('#tarea').on('input', function() {
+    text = $('#tarea').val();
+    $('#div1').html(text);
 
     lang = $("#lang :selected").val();
     $.ajax({
@@ -34,16 +69,43 @@ $('textarea').on('input', function() {
   data : {'data' : text,'lang' : lang},
   
   success: function(data) {
-    $('p').html(data);
+   
+    console.log(data) 
+    json=JSON.parse(data);
+    $('#test').html(json[0]);
+    var data = ""
+    for(var i =0;i < json.length;i++)
+    {   
+    var item = json[i];
+    data +=  '<button id='+item+'>'+item+'</button>' 
+ 
+    
+    }   
+    $('#test1').html(data);
+
+
+           
+
     }
 
 
 });
-
-  
-
+      
 
   });
+
+
+  $('#test1').click(function( e ){
+    
+    var v = e.target.id
+    console.log("Clicked "+v)
+    $('#tarea').val(v);
+
+
+
+});
+
+
 
 
 
