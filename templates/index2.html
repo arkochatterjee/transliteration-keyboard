@@ -5,74 +5,69 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
 <style>
 body,h1 {font-family: "Raleway", sans-serif}
 body, html {height: 100%}
 .bgimg {
-    background-color: black;
-  min-height: 100%;
-  background-position: center;
-  background-size: cover;
+background-color: black;
+min-height: 100%;
+background-position: center;
+background-size: cover;
 }
 
 div.justified {
-        display: flex;
-        justify-content: center;
-    }
+display: flex;
+justify-content: center;
+}
 </style>
-<body>
-  
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+
+
+<body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
 <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-  <div class="w3-display-topleft w3-padding-large w3-xlarge">
-    <!--Lpgo -->
+
+<div class="w3-display-middle">
+<h1 class="w3-jumbo w3-animate-top">Transliteration Keyboard </h1>
+<hr class="w3-border-grey" style="margin:auto;width:40%">
+
+<!-- Language selection from Array sent from Flask to HTML -->
+<p class="w3-large w3-center">Select Language : 
+
+<!-- Shows list of Languages -->
+<select id="lang">
+  {% for l in lang %}
+  <option value="{{ l }}" id="{{ l }}">{{ l }}</option>"
+  {% endfor %}
+  </select>
+  <br></p>
+  <div class="justified">
+  <textarea placeholder="Type something here" rows="5" cols="50" list="cars" id="tarea"></textarea>
   </div>
-  <div class="w3-display-middle">
-    <h1 class="w3-jumbo w3-animate-top">Transliteration Keyboard </h1>
-    <hr class="w3-border-grey" style="margin:auto;width:40%">
-    <p class="w3-large w3-center">Select Language : 
-            <select id="lang">
-                {% for l in lang %}
-                <option value="{{ l }}" id="{{ l }}">{{ l }}</option>"
-                {% endfor %}
-
-                   
-                     <!--   <option value="bengali" id="bengali" selected="selected">Bengali</option>
-                        <option value="hindi" id="hindi">Hindi</option>
-                        <option value="tamil" id="tamil">Tamil</option>
-                        <option value="gujrati" id="gujrati">Gujrati</option>
-                        <option value="marathi" id="marathi">Marathi</option>
-                        <option value="kannada" id="kannada">Kannada</option>
-                        <option value="malayalam" id="malayalam">Malayalam</option>
-                        <option value="punjabi" id="punjabi">Punjabi</option>
-                        <option value="nepali" id="nepali">Nepali</option> -->
-
-                   
-                    </select>
-                    <br></p>
-    <div class="justified">
-    <textarea placeholder="Type something here" rows="5" cols="50" list="cars" id="tarea"></textarea>
-    </div>
-    <br>
-    <p class="w3-large w3-center" id="select"></p>
-    <div class="justified">
-    <div id="test1"></div>
+<br>
+<p class="w3-large w3-center" id="select"></p>
+<div class="justified">
+<div id="test1"></div>
 <br>
 
-    <div id="test5"></div>
+<div id="test5"></div>
 </div>
 
 <hr><br>
-   
-  </div>
-  <div class="w3-display-bottomleft w3-padding-large">
-      Developed by Arko Chatterjee
-    
-  </div>
+
+</div>
+<div class="w3-display-bottomleft w3-padding-large">
+Developed by Arko Chatterjee
+
+</div>
 </div>
 
 
@@ -82,101 +77,92 @@ div.justified {
 
 <script>
 
-        $('#tarea').on('input', function() {
-            text = $('#tarea').val();
-            //console.log((text))
-            //console.log(jQuery.type(text))
+$('#tarea').on('input', function() {
+text = $('#tarea').val();
 
-            var word = text.substr(text.length-1);
-            //console.log(word)
-           // $('#test5').html(text);
+var lastWord = text.substring(text.lastIndexOf(" ")+1);
 
 
 
-            var lastWord = text.substring(text.lastIndexOf(" ")+1);
+if(word === " ")
+{
+console.log("Space Detected!")
+}
+else
+{
 
-            console.log("LAST WORD: "+lastWord)
+
+lang = $("#lang :selected").val();
+$.ajax({
+type : 'POST',
+url : "{{url_for('predict')}}",
+data : {'data' : lastWord,'lang' : lang},
+
+success: function(data) {
 
 
-            if(word === " ")
-            {
-              console.log("New Word")
-            }
-            else
-            {
+json=JSON.parse(data);
+$('#test').html(json[0]);
+var data = ""
+for(var i =0;i < json.length;i++)
+{   
+var item = json[i];
+data +=  '<button id='+item+'>'+item+'</button>' 
 
-              
-            lang = $("#lang :selected").val();
-            $.ajax({
-          type : 'POST',
-          url : "{{url_for('predict')}}",
-          data : {'data' : lastWord,'lang' : lang},
-          
-          success: function(data) {
-           
-            //console.log(data) 
-            json=JSON.parse(data);
-            $('#test').html(json[0]);
-            var data = ""
-            for(var i =0;i < json.length;i++)
-            {   
-            var item = json[i];
-            data +=  '<button id='+item+'>'+item+'</button>' 
-         
-            
-            }   
-            $('#test1').html(data);
 
-            if(json[0] == "")
-            {
-                $('#select').html(" ");
-            }
-            else{
-                $('#select').html("Select from the options");
-            }
-           
-        
-            console.log("Inside AJAX :"+lastWord)
-            lW = lastWord
+}   
+$('#test1').html(data);
 
-            $('#test1').click(function( e ){
-            console.log("Inside onClick :"+lW)
-            var v = e.target.id
-            var textarea=$('#tarea'); 
-          
-            textarea.val(text.replace(lW, v+" "))
-            console.log("Clicked "+v)
-          
-           
-        
-        
-        
-        });
-                   
-        
-            }
+if(json[0] == "")
+{
+$('#select').html(" ");
+}
+else{
+$('#select').html("Select from the options");
+}
 
-            
-        
-        
-        });
-        
-        // end of else
-      }
 
-    
-              
-        
-          });
-        
-        
-        
-        
-        
-        
-        
-        
-        </script>
+console.log("Inside AJAX :"+lastWord)
+lW = lastWord
+
+$('#test1').click(function( e ){
+console.log("Inside onClick :"+lW)
+var v = e.target.id
+var textarea=$('#tarea'); 
+
+textarea.val(text.replace(lW, v+" "))
+console.log("Clicked "+v)
+
+
+
+
+
+});
+
+
+}
+
+
+
+
+});
+
+// end of else
+}
+
+
+
+
+});
+
+
+
+
+
+
+
+
+</script>
 
 </body>
 </html>
