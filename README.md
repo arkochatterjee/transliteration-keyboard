@@ -13,9 +13,7 @@ Steps to run in localsystem :
 4. Flask server is live at http://0.0.0.0:8001
 
 
-API used : 
-
-xlit.quillpad.in/quillpad_backend2/processWordJSON?lang=**Language-to-be-translated In**&inString=**Input String**
+API used : xlit.quillpad.in/quillpad_backend2/processWordJSON?lang=**Language-to-be-translated-in**&inString=**Input String**
 
 
 Technical Stack used:
