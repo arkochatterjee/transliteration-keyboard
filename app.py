@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index2.html')
+    lang = [ 'hindi', 'tamil', 'telugu', 'bengali', 'gujrati', 'marathi', 'kannada', 'malayalam', 'punjabi', 'nepali']
+    return render_template('index2.html', lang = lang)
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
@@ -16,6 +17,7 @@ def predict():
         language=request.form['lang']
         print(clicked)
         print(language)
+        #session['lang'] = language
 
         #Calling API to search for transliteration
         api = "http://xlit.quillpad.in/quillpad_backend2/processWordJSON?lang={0}&inString={1}".format(language,clicked)

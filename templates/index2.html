@@ -36,10 +36,21 @@ div.justified {
     <hr class="w3-border-grey" style="margin:auto;width:40%">
     <p class="w3-large w3-center">Select Language : 
             <select id="lang">
+                {% for l in lang %}
+                <option value="{{ l }}" id="{{ l }}">{{ l }}</option>"
+                {% endfor %}
+
                    
-                        <option value="bengali" id="bengali" selected="selected">Bengali</option>
+                     <!--   <option value="bengali" id="bengali" selected="selected">Bengali</option>
                         <option value="hindi" id="hindi">Hindi</option>
                         <option value="tamil" id="tamil">Tamil</option>
+                        <option value="gujrati" id="gujrati">Gujrati</option>
+                        <option value="marathi" id="marathi">Marathi</option>
+                        <option value="kannada" id="kannada">Kannada</option>
+                        <option value="malayalam" id="malayalam">Malayalam</option>
+                        <option value="punjabi" id="punjabi">Punjabi</option>
+                        <option value="nepali" id="nepali">Nepali</option> -->
+
                    
                     </select>
                     <br></p>
@@ -50,13 +61,16 @@ div.justified {
     <p class="w3-large w3-center" id="select"></p>
     <div class="justified">
     <div id="test1"></div>
+<br>
+
+    <div id="test5"></div>
 </div>
 
 <hr><br>
    
   </div>
   <div class="w3-display-bottomleft w3-padding-large">
-      Developed by Arko Chatterjee!
+      Developed by Arko Chatterjee
     
   </div>
 </div>
@@ -70,17 +84,37 @@ div.justified {
 
         $('#tarea').on('input', function() {
             text = $('#tarea').val();
-            $('#div1').html(text);
-        
+            //console.log((text))
+            //console.log(jQuery.type(text))
+
+            var word = text.substr(text.length-1);
+            //console.log(word)
+           // $('#test5').html(text);
+
+
+
+            var lastWord = text.substring(text.lastIndexOf(" ")+1);
+
+            console.log("LAST WORD: "+lastWord)
+
+
+            if(word === " ")
+            {
+              console.log("New Word")
+            }
+            else
+            {
+
+              
             lang = $("#lang :selected").val();
             $.ajax({
           type : 'POST',
           url : "{{url_for('predict')}}",
-          data : {'data' : text,'lang' : lang},
+          data : {'data' : lastWord,'lang' : lang},
           
           success: function(data) {
            
-            console.log(data) 
+            //console.log(data) 
             json=JSON.parse(data);
             $('#test').html(json[0]);
             var data = ""
@@ -102,28 +136,41 @@ div.justified {
             }
            
         
-            
-                   
-        
-            }
-        
-        
-        });
-              
-        
-          });
-        
-        
-          $('#test1').click(function( e ){
-            
+            console.log("Inside AJAX :"+lastWord)
+            lW = lastWord
+
+            $('#test1').click(function( e ){
+            console.log("Inside onClick :"+lW)
             var v = e.target.id
+            var textarea=$('#tarea'); 
+          
+            textarea.val(text.replace(lW, v+" "))
             console.log("Clicked "+v)
-            $('#tarea').val(v);
+          
            
         
         
         
         });
+                   
+        
+            }
+
+            
+        
+        
+        });
+        
+        // end of else
+      }
+
+    
+              
+        
+          });
+        
+        
+        
         
         
         
